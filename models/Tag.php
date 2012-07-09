@@ -42,8 +42,9 @@ class Tag extends ActiveRecord
 
         $sizeRange = self::MAX_FONT_SIZE - self::MIN_FONT_SIZE;
 
-        $minCount = log(Yii::app()->db->createCommand("SELECT MIN(frequency) FROM " . $this->tableName())->queryScalar() + 1);
-        $maxCount = log(Yii::app()->db->createCommand("SELECT MAX(frequency) FROM " . $this->tableName())->queryScalar() + 1);
+        $row = Yii::app()->db->createCommand("SELECT MIN(frequency) AS `min`, MAX(frequency) AS `max` FROM " . $this->tableName())->queryRow();
+        $minCount = log($row['min'] + 1);
+        $maxCount = log($row['max'] + 1);
         $countRange = $maxCount - $minCount;
 
         foreach ($models as $model)
